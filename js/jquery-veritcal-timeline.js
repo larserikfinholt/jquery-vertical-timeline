@@ -167,7 +167,7 @@
         postProcess: function(el) {
           // Map the columns.  Tabletop removes spaces.
           $.each(timelineConfig.columnMapping, function(key, val) {
-            key = key.replace(' ', '');
+            key = key.split(' ').join('');
             if (el[key]) {
               el[val] = el[key];
             }
