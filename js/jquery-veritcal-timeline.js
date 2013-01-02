@@ -63,21 +63,21 @@
         </div> \
       ',
       buttonTemplate: ' \
-        <div id="buttons"> \
-          <div id="expand-collapse-buttons"> \
-            <a class="expand-all active" href="#"><span>EXPAND ALL</span></a> \
-            <a class="collapse-all" href="#"><span>COLLAPSE ALL</span></a> \
+        <div class="vertical-timeline-buttons"> \
+          <div class="expand-collapse-buttons"> \
+            <a class="expand-all active" href="#"><span>Expand all</span></a> \
+            <a class="collapse-all" href="#"><span>Collapse all</span></a> \
           </div> \
-          <div id="sort-buttons"> \
-            <a class="sort-newest active" href="#"><span>NEWEST FIRST</span></a> \
-            <a class="sort-oldest" href="#"><span>OLDEST FIRST</span></a> \
+          <div class="sort-buttons"> \
+            <a class="sort-newest active" href="#"><span>Newest first</span></a> \
+            <a class="sort-oldest" href="#"><span>Oldest first</span></a> \
           </div> \
         </div> \
       ',
       timelineTemplate: ' \
-        <div id="timeline"> \
-          <div id="line-container"> \
-            <div id="line"></div> \
+        <div class="vertical-timeline-timeline"> \
+          <div class="line-container"> \
+            <div class="line"></div> \
           </div> \
         </div> \
       '
@@ -179,23 +179,23 @@
           // Add any other data
           val.sharing = timelineConfig.sharing;
           // Add output to timeline
-          $('#timeline').append(postTemplate(val));
+          $('.vertical-timeline-timeline').append(postTemplate(val));
         });
   
         // Add a group marker for each group
         $.each(groups, function(i, group) {
-          $('#timeline').append(groupMarkerTemplate(group));
+          $('.vertical-timeline-timeline').append(groupMarkerTemplate(group));
         });
         
         // Handle default sort direction
         if (timelineConfig.defaultDirection != 'newest') {
-          $('#sort-buttons a').removeClass('active');
-          $('#sort-buttons a.sort-oldest').addClass('active');
+          $('.sort-buttons a').removeClass('active');
+          $('.sort-buttons a.sort-oldest').addClass('active');
         }
     
         // Start rendering isotope goodness when images are loaded.
-        $('#timeline').imagesLoaded(function() {
-          $('#timeline').isotope({
+        $('.vertical-timeline-timeline').imagesLoaded(function() {
+          $('.vertical-timeline-timeline').isotope({
             itemSelector : '.item',
             transformsEnabled: true,
             layoutMode: 'spineAlign',
@@ -220,20 +220,20 @@
         }
     
         // add open/close buttons to each post
-        $('#timeline .item.post').each(function() {
+        $('.vertical-timeline-timeline .item.post').each(function() {
           $(this).find('.inner').append('<a href="#" class="open-close"></a>');
         });
     
-        $('#timeline .item a.open-close').click(function(e) {
+        $('.vertical-timeline-timeline .item a.open-close').click(function(e) {
           $(this).siblings('.body').slideToggle(function() {
-            $('#timeline').isotope('reLayout');
+            $('.vertical-timeline-timeline').isotope('reLayout');
           });
           $(this).parents('.post').toggleClass('closed');
-          $('#expand-collapse-buttons a').removeClass('active');
+          $('.expand-collapse-buttons a').removeClass('active');
           e.preventDefault();
         });
     
-        $('#timeline .post .share').hover(
+        $('.vertical-timeline-timeline .post .share').hover(
           function() {
             $(this).find('.share-trigger').addClass('over');
             $(this).find('.share-popup').show();
@@ -244,22 +244,22 @@
           }
         );
     
-        $('#buttons a.expand-all').click(function(e) {
+        $('.vertical-timeline-buttons a.expand-all').click(function(e) {
           $('.post .body').slideDown(function() {
-            $('#timeline').isotope('reLayout');
+            $('.vertical-timeline-timeline').isotope('reLayout');
           });
           $('.post').removeClass('closed');
-          $('#expand-collapse-buttons a').removeClass('active');
+          $('.expand-collapse-buttons a').removeClass('active');
           $(this).addClass('active');
           e.preventDefault();
         });
     
-        $('#buttons a.collapse-all').click(function(e) {
+        $('.vertical-timeline-buttons a.collapse-all').click(function(e) {
           $('.post .body').slideUp(function() {
-            $('#timeline').isotope('reLayout');
+            $('.vertical-timeline-timeline').isotope('reLayout');
           });
           $('.post').addClass('closed');
-          $('#expand-collapse-buttons a').removeClass('active');
+          $('.expand-collapse-buttons a').removeClass('active');
           $(this).addClass('active');
           e.preventDefault();
         });
@@ -294,31 +294,31 @@
         var y = (itemPosition != null && itemPosition.y != null) ? 
           parseInt(itemPosition.y) : 0;
         var lineHeight = y + innerMargin + top + (dateHeight / 2);
-        $('#line').height(lineHeight);
+        $('.line').height(lineHeight);
       }
     
-      $('#sort-buttons a').click(function(e) {
+      $('.sort-buttons a').click(function(e) {
         var $this = $(this);
         // don't proceed if already selected
         if ($this.hasClass('active')) {
           return false;
         }
     
-        $('#sort-buttons a').removeClass('active');
+        $('.sort-buttons a').removeClass('active');
         $this.addClass('active');
         if ($this.hasClass('sort-newest')) {
           updateGroupMarkers(false);
-          $('#timeline').isotope('reloadItems').isotope({sortAscending: false});
+          $('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: false});
         }
         else{
           updateGroupMarkers(true);
-          $('#timeline').isotope('reloadItems').isotope({sortAscending: true});
+          $('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: true});
         }
         e.preventDefault();
       });
     
     
-      $('#timeline').resize(function() { // uses "jQuery resize event" plugin
+      $('.vertical-timeline-timeline').resize(function() { // uses "jQuery resize event" plugin
         adjustLine();
       });
     
