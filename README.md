@@ -103,6 +103,7 @@ The following options can be passed to the plugin when called:
 
 ## Bugs 
 
+* IE7 has some styling issues.
 * The original sharing code did not work anymore so that is currently removed.
 * Please use the [issue queue](https://github.com/MinnPost/jquery-vertical-timeline/issues) to report any more bugs.
 
