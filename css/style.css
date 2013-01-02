@@ -74,7 +74,7 @@
   line-height: 1.5;
 }
 .vertical-timeline-container .vertical-timeline-timeline .post a.open-close{
-  background: transparent url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/button-up-down-arrow.png) no-repeat;
+  background: transparent url(img/button-up-down-arrow.png) no-repeat;
   height: 17px;
   width: 16px;
   position: absolute;
@@ -123,7 +123,7 @@
   width: 28px;
   height: 28px;
   border: 1px #87b2d3 solid;
-  background: #d6e5f0 url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/icon-share.png) no-repeat center center;
+  background: #d6e5f0 url(img/icon-share.png) no-repeat center center;
   display: block;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -144,7 +144,7 @@
 }
 .vertical-timeline-container .vertical-timeline-timeline .post .share-popup{
   display: none;
-  background: transparent url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/popup.png) no-repeat;
+  background: transparent url(img/popup.png) no-repeat;
   width: 166px;
   height: 50px;
   position: absolute;
@@ -181,11 +181,11 @@
   line-height: 20px;
 }
 .vertical-timeline-container .vertical-timeline-timeline .post.left .date{
-  background: transparent url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/tab-left.png) no-repeat right;
+  background: transparent url(img/tab-left.png) no-repeat right;
   right: -54px;
 }
 .vertical-timeline-container .vertical-timeline-timeline .post.right .date{
-  background: transparent url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/tab-right.png) no-repeat left;
+  background: transparent url(img/tab-right.png) no-repeat left;
   left: -54px;
 }
 .vertical-timeline-container .vertical-timeline-timeline .group-marker {
@@ -264,12 +264,12 @@
 }
 .vertical-timeline-container .vertical-timeline-buttons a.expand-all span,
 .vertical-timeline-container .vertical-timeline-buttons a.sort-newest span{
-  background-image: url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/up-arrows.png);
+  background-image: url(img/up-arrows.png);
   background-repeat: no-repeat;
 }
 .vertical-timeline-container .vertical-timeline-buttons a.collapse-all span,
 .vertical-timeline-container .vertical-timeline-buttons a.sort-oldest span{
-  background-image: url(https://s3.amazonaws.com/data.minnpost/js/balancemedia-Timeline-master-20121204/img/down-arrows.png);
+  background-image: url(img/down-arrows.png);
   background-repeat: no-repeat;
 }
 
