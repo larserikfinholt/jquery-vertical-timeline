@@ -1,16 +1,17 @@
-# Super Awesome Vertical Timeline
+# jQuery Vertical Timeline
 
-**Timeline** shows a series of events in a vertically time-sorted structure.
+Forked from the [Super Awesome Vertical Timeline](https://github.com/balancemedia/Timeline).
 
-Timeline utilizes a handful of super cool libraries, including [Tabletop.js](http://github.com/jsoma/tabletop) (for the data storage) and [Isotope](http://isotope.metafizzy.co/) for the layout.
+jQuery Vertical Timeline utilizes a handful of super cool libraries, including [Tabletop.js](http://github.com/jsoma/tabletop) (for the data storage) and [Isotope](http://isotope.metafizzy.co/) for the layout.
 
-A running example can be found [here](http://builtbybalance.com/github-timeline/).
+A running example can be found [here](http://minnpost.github.com/jquery-vertical-timeline/example.html).
 
 ## How to Use
 
-### 1) Set up your data using Tabletop.js
+### Data
 
-Create a Google Spreadsheet with the following columns:
+Create a Google Spreadsheet with the following columns (see options for different names) and publish it.
+
 * title
 * date
 * display date
@@ -20,29 +21,47 @@ Create a Google Spreadsheet with the following columns:
 * read more url
 
 **Please note that the the _display date_ column must be in the format _Month day, Year_ (April 25, 2012) for proper javascript parsing.**
+
 **Also, all columns must be _plain text_ format, including the two date columns.**
 
-Now follow the instructions over at Tabletop.js to publish the Spreadsheet.
+### Include CSS and JS
 
-The Spreadsheet used in the example index.html file is at [https://docs.google.com/spreadsheet/ccc?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc](https://docs.google.com/spreadsheet/ccc?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc)
+Include the CSS:
 
-### 2) Insert the Spreadsheet key into script.js
+    <link rel="stylesheet" href="css/style.css">
 
-Find your Spreadsheet key (see Tabletop.js for instructions), and replace the sample key on line 3 of `js/script.js` with the key to your Spreadsheet.
+Include the Javascript.  Would be beneficial to combine these into a single file.
 
-You also need to update the name of the spreadsheet 'sheet' that holds the data on line 4 of 'js/script.js'.
+    <script type="text/javascript" src="js/libs/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/libs/handlebars-1.0.rc.1.min.js"></script>
+    <script type="text/javascript" src="js/libs/tabletop.master-20121204.min.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.isotope.v1.5.21.min.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.ba-resize.v1.1.min.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.imagesloaded.v2.1.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-veritcal-timeline.js"></script>
 
-### 3) Enjoy!
+### Run
+
+First, include a container for the timeline:
+
+    <div class="timeline-jquery-example-1">
+    </div>
+    
+Call timeline with options.  Note that the ```key``` is the ID of the Google Spreadsheet, and the ```sheetname``` is the name of the sheet.
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.timeline-jquery-example-1').verticalTimeline({
+        key: '0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc',
+        sheetName: 'Posts'
+      });
+    });
+  </script>
 
 ## Bugs 
 
-* None? Tested on Chrome, Firefox, Safari, & IE 7-9.
-
-## Possible Improvements
-
-* Turn this into a jQuery plugin.
-* Remove hard coded Tabletop.js Spreadsheet key
-* Remove hard coded `#timeline` element from script, and allow for multiple Timelines per page
+* The original sharing code did not work anymore so that is currently removed.
+* Please use the [issue queue](https://github.com/MinnPost/jquery-vertical-timeline/issues) to report any more bugs.
 
 ## Credits
 
