@@ -14,8 +14,50 @@
     defaultDirection: 'oldest',
     groupFunction: groupSegmentByYear,
     sharing: false,
-    postTemplate: $('#post-template').html(),
-    groupMarkerTemplate: $('#group-marker-template').html(),
+    postTemplate: ' \
+      <div class="item post"> \
+        <div class="inner"> \
+          <div class="timestamp">{{timestamp}}</div> \
+          <div class="title"><h3>{{title}}</h3></div> \
+          <div class="date">{{display_date}}</div> \
+          <div class="body"> \
+            {{#if photo_url}} \
+              <img src="{{photo_url}}" alt=""> \
+            {{/if}} \
+            {{#if caption}} \
+              <div class="caption">({{caption}})</div> \
+            {{/if}} \
+            {{#if body}} \
+              <div class="text">{{{body}}}</div> \
+            {{/if}} \
+            <div class="clearfix"> \
+              {{#if read_more_url}} \
+                <a target="_blank" class="more" href="{{read_more_url}}">READ MORE</a> \
+                {{#if sharing}} \
+                  <div class="share"> \
+                    <a href="#" class="share-trigger"></a> \
+                    <div class="share-popup"> \
+                      <a href="https://twitter.com/share" class="twitter-share-button" data-url="{{read_more_url}}" data-text="{{title}}" data-count="none">Tweet</a> \
+                      <a class="facebook-share-button" name="fb_share" type="button" share_url="{{read_more_url}}">Share</a> \
+                    </div> \
+                  </div> \
+                {{/if}} \
+              {{/if}} \
+            </div> \
+          </div> \
+        </div> \
+      </div> \
+    ',
+    groupMarkerTemplate: ' \
+      <div class="item group-marker item-group-{{id}}" data-id="{{id}}"> \
+        <div class="inner"> \
+          <div class="inner2"> \
+            <div class="timestamp">{{timestamp}}</div> \
+            <div class="group">{{groupDisplay}}</div> \
+          </div> \
+        </div> \
+      </div> \
+    ',
     buttonTemplate: ' \
       <div id="buttons"> \
         <div id="expand-collapse-buttons"> \
