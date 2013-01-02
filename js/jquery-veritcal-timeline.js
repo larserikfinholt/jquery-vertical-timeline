@@ -95,7 +95,7 @@
     /**
      * Grouping function by Decade.
      */
-    function groupSegmentByDecade(segment, groups, direction) {
+    var groupSegmentByDecade = function(segment, groups, direction) {
       // Grouping by decade
       var year = new Date(segment.timestamp).getFullYear();
       var yearStr = year.toString();
@@ -117,7 +117,7 @@
     /**
      * Grouping function by year.
      */
-    function groupSegmentByYear(segment, groups, direction) {
+    var groupSegmentByYear = function(segment, groups, direction) {
       // Grouping by decade
       var year = new Date(segment.timestamp).getFullYear();
       
@@ -147,42 +147,20 @@
     // Go through each jquery object
     return this.each(function() {  
       var $thisObj = $(this);
-      
-      // Variables used across application (not the best way to
-      // do this.
       var groups = {};
+      var verticalTimeline = {};
       
       // Add class to mark as processed
       $thisObj.addClass('vertical-timeline-container');
       
       // Add in extra markup
       $thisObj.html(timelineConfig.buttonTemplate + 
-        timelineConfig.timelineTemplate)
-    
-      // Get data via Tabletop
-      Tabletop.init({
-        key: timelineConfig.key,
-        callback: setupTimeline,
-        wanted: [timelineConfig.sheetName],
-        postProcess: function(el) {
-          // Map the columns.  Tabletop removes spaces.
-          $.each(timelineConfig.columnMapping, function(key, val) {
-            key = key.split(' ').join('');
-            if (el[key]) {
-              el[val] = el[key];
-            }
-          });
-          
-          // Parse out the date
-          el['timestamp'] = Date.parse(el['date']);
-        }
-      });
-      
+        timelineConfig.timelineTemplate);
       
       /**
-       * Load the data in for isotope processing
+       * Handle data loaded in from Tabletop, then render.
        */
-      function setupTimeline(data, tabletop) {
+      verticalTimeline.setupTimeline = function(data, tabletop) {
         var postTemplate  = Handlebars.compile(timelineConfig.postTemplate);
         var groupMarkerTemplate  = Handlebars.compile(timelineConfig.groupMarkerTemplate);
         
@@ -207,6 +185,11 @@
           $thisObj.find('.sort-buttons a').removeClass('active');
           $thisObj.find('.sort-buttons a.sort-oldest').addClass('active');
         }
+        
+        verticalTimeline.handleSharing();
+        verticalTimeline.handleExpanding();
+        verticalTimeline.handleSorting();
+        verticalTimeline.handleResizing();
     
         // Start rendering isotope goodness when images are loaded.
         $thisObj.find('.vertical-timeline-timeline').imagesLoaded(function() {
@@ -227,14 +210,35 @@
             itemPositionDataEnabled: true
           });
         });
-    
+      };
+      
+      /**
+       * Handle sharing.
+       */
+      verticalTimeline.handleSharing = function() {
         // load scripts after all the html has been set
         if (timelineConfig.sharing) {
           $.getScript('//static.ak.fbcdn.net/connect.php/js/FB.Share');
           $.getScript('//platform.twitter.com/widgets.js');
-        }
     
-        // add open/close buttons to each post
+          $thisObj.find('.vertical-timeline-timeline .post .share').hover(
+            function() {
+              $(this).find('.share-trigger').addClass('over');
+              $(this).find('.share-popup').show();
+            },
+            function() {
+              $(this).find('.share-trigger').removeClass('over');
+              $(this).find('.share-popup').hide();
+            }
+          );
+        }
+      };
+      
+      /**
+       * Handle post expanding/collapsing.
+       */
+      verticalTimeline.handleExpanding = function() {
+        // Add open/close buttons to each post
         $thisObj.find('.vertical-timeline-timeline .item.post').each(function() {
           $(this).find('.inner').append('<a href="#" class="open-close"></a>');
         });
@@ -247,17 +251,6 @@
           $thisObj.find('.expand-collapse-buttons a').removeClass('active');
           e.preventDefault();
         });
-    
-        $thisObj.find('.vertical-timeline-timeline .post .share').hover(
-          function() {
-            $(this).find('.share-trigger').addClass('over');
-            $(this).find('.share-popup').show();
-          },
-          function() {
-            $(this).find('.share-trigger').removeClass('over');
-            $(this).find('.share-popup').hide();
-          }
-        );
     
         $thisObj.find('.vertical-timeline-buttons a.expand-all').click(function(e) {
           $thisObj.find('.post .body').slideDown(function() {
@@ -278,13 +271,48 @@
           $(this).addClass('active');
           e.preventDefault();
         });
-    
-      }
-    
-      /*
+      };
+      
+      /**
+       * Handle sorting.
+       */
+      verticalTimeline.handleSorting = function() {
+        $thisObj.find('.sort-buttons a').click(function(e) {
+          var $this = $(this);
+          // don't proceed if already selected
+          if ($this.hasClass('active')) {
+            return false;
+          }
+      
+          $thisObj.find('.sort-buttons a').removeClass('active');
+          $this.addClass('active');
+          if ($this.hasClass('sort-newest')) {
+            verticalTimeline.updateGroupMarkers(false);
+            $thisObj.find('.vertical-timeline-timeline').isotope('reloadItems')
+              .isotope({sortAscending: false});
+          }
+          else {
+            verticalTimeline.updateGroupMarkers(true);
+            $thisObj.find('.vertical-timeline-timeline').isotope('reloadItems')
+              .isotope({sortAscending: true});
+          }
+          e.preventDefault();
+        });
+      };
+      
+      /**
+       * Handle resize.  Uses "jQuery resize event" plugin
+       */
+      verticalTimeline.handleResizing = function() {
+        $thisObj.find('.vertical-timeline-timeline').resize(function() { // 
+          verticalTimeline.adjustLine();
+        });
+      };
+      
+      /**
        * Update group markers as they are an interval.
        */
-      function updateGroupMarkers(direction) {
+      verticalTimeline.updateGroupMarkers = function(direction) {
         $thisObj.find('.group-marker').each(function() {
           var $this = $(this);
           var id = $this.attr('data-id');
@@ -293,12 +321,12 @@
           
           $this.find('.timestamp').text(timestamp);
         });
-      }
-    
-      /*
+      };
+      
+      /**
        * Keep the actual line from extending beyond the last item's date tab
        */
-      function adjustLine() {
+      verticalTimeline.adjustLine = function() {
         var $lastItem = $thisObj.find('.item.last');
         var itemPosition = $lastItem.data('isotope-item-position');
         var dateHeight = $lastItem.find('.date').height();
@@ -310,108 +338,105 @@
           parseInt(itemPosition.y) : 0;
         var lineHeight = y + innerMargin + top + (dateHeight / 2);
         $thisObj.find('.line').height(lineHeight);
-      }
+      };
     
-      $thisObj.find('.sort-buttons a').click(function(e) {
-        var $this = $(this);
-        // don't proceed if already selected
-        if ($this.hasClass('active')) {
-          return false;
-        }
-    
-        $thisObj.find('.sort-buttons a').removeClass('active');
-        $this.addClass('active');
-        if ($this.hasClass('sort-newest')) {
-          updateGroupMarkers(false);
-          $thisObj.find('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: false});
-        }
-        else{
-          updateGroupMarkers(true);
-          $thisObj.find('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: true});
-        }
-        e.preventDefault();
-      });
-    
-    
-      $thisObj.find('.vertical-timeline-timeline').resize(function() { // uses "jQuery resize event" plugin
-        adjustLine();
-      });
-    
-    
-      /*
-       * Isotope custom layout mode spineAlign
+      /**
+       * Get data via Tabletop and then start rendering.
        */
-      $.Isotope.prototype._spineAlignReset = function() {
-        this.spineAlign = {
-          colA: 0,
-          colB: 0,
-          lastY: -60
-        };
-      };
-      $.Isotope.prototype._spineAlignLayout = function( $elems ) {
-        var instance = this,
-          props = this.spineAlign,
-          gutterWidth = Math.round( this.options.spineAlign && this.options.spineAlign.gutterWidth ) || 0,
-          centerX = Math.round(this.element.width() / 2);
-      
-        $elems.each(function(i, val) {
-          var $this = $(this);
-          $this.removeClass('last').removeClass('top');
-          if (i == $elems.length - 1)
-            $this.addClass('last');
-          var x, y;
-          if ($this.hasClass('group-marker')) {
-            var width = $this.width();
-            x = centerX - (width / 2);
-            if (props.colA >= props.colB) {
-              y = props.colA;
-              if (y == 0) $this.addClass('top');
-              props.colA += $this.outerHeight(true);
-              props.colB = props.colA;
+      Tabletop.init({
+        key: timelineConfig.key,
+        callback: verticalTimeline.setupTimeline,
+        wanted: [timelineConfig.sheetName],
+        postProcess: function(el) {
+          // Map the columns.  Tabletop removes spaces.
+          $.each(timelineConfig.columnMapping, function(key, val) {
+            key = key.split(' ').join('');
+            if (el[key]) {
+              el[val] = el[key];
             }
-            else{
-              y = props.colB;
-              if (y == 0) $this.addClass('top');
-              props.colB += $this.outerHeight(true);
-              props.colA = props.colB;
-            }
-          }
-          else{
-            $this.removeClass('left').removeClass('right');
-            var isColA = props.colB >= props.colA;
-            if (isColA)
-              $this.addClass('left');
-            else
-              $this.addClass('right');
-            x = isColA ?
-              centerX - ( $this.outerWidth(true) + gutterWidth / 2 ) : // left side
-              centerX + (gutterWidth / 2); // right side
-            y = isColA ? props.colA : props.colB;
-            if (y - props.lastY <= 60) {
-              var extraSpacing = 60 - Math.abs(y - props.lastY);
-              $this.find('.inner').css('marginTop', extraSpacing);
-              props.lastY = y + extraSpacing;
-            }
-            else{
-              $this.find('.inner').css('marginTop', 0);
-              props.lastY = y;
-            }
-            props[( isColA ? 'colA' : 'colB' )] += $this.outerHeight(true);
-          }
-          instance._pushPosition( $this, x, y );
-        });
-      };
-      $.Isotope.prototype._spineAlignGetContainerSize = function() {
-        var size = {};
-        size.height = this.spineAlign[( this.spineAlign.colB > this.spineAlign.colA ? 'colB' : 'colA' )];
-        return size;
-      };
-      $.Isotope.prototype._spineAlignResizeChanged = function() {
-        return true;
-      };
-      
+          });
+          
+          // Parse out the date
+          el['timestamp'] = Date.parse(el['date']);
+        }
+      });
     });  
   };  
 
+
+  /**
+   * Isotope custom layout mode spineAlign (general)
+   */
+  $.Isotope.prototype._spineAlignReset = function() {
+    this.spineAlign = {
+      colA: 0,
+      colB: 0,
+      lastY: -60
+    };
+  };
+  $.Isotope.prototype._spineAlignLayout = function( $elems ) {
+    var instance = this,
+      props = this.spineAlign,
+      gutterWidth = Math.round( this.options.spineAlign && this.options.spineAlign.gutterWidth ) || 0,
+      centerX = Math.round(this.element.width() / 2);
+  
+    $elems.each(function(i, val) {
+      var $this = $(this);
+      $this.removeClass('last').removeClass('top');
+      if (i == $elems.length - 1)
+        $this.addClass('last');
+      var x, y;
+      if ($this.hasClass('group-marker')) {
+        var width = $this.width();
+        x = centerX - (width / 2);
+        if (props.colA >= props.colB) {
+          y = props.colA;
+          if (y == 0) $this.addClass('top');
+          props.colA += $this.outerHeight(true);
+          props.colB = props.colA;
+        }
+        else {
+          y = props.colB;
+          if (y == 0) $this.addClass('top');
+          props.colB += $this.outerHeight(true);
+          props.colA = props.colB;
+        }
+      }
+      else {
+        $this.removeClass('left').removeClass('right');
+        var isColA = props.colB >= props.colA;
+        if (isColA) {
+          $this.addClass('left');
+        }
+        else {
+          $this.addClass('right');
+        }
+        
+        x = isColA ?
+          centerX - ( $this.outerWidth(true) + gutterWidth / 2 ) : // left side
+          centerX + (gutterWidth / 2); // right side
+        y = isColA ? props.colA : props.colB;
+        if (y - props.lastY <= 60) {
+          var extraSpacing = 60 - Math.abs(y - props.lastY);
+          $this.find('.inner').css('marginTop', extraSpacing);
+          props.lastY = y + extraSpacing;
+        }
+        else {
+          $this.find('.inner').css('marginTop', 0);
+          props.lastY = y;
+        }
+        props[( isColA ? 'colA' : 'colB' )] += $this.outerHeight(true);
+      }
+      instance._pushPosition( $this, x, y );
+    });
+  };
+  $.Isotope.prototype._spineAlignGetContainerSize = function() {
+    var size = {};
+    size.height = this.spineAlign[( this.spineAlign.colB > this.spineAlign.colA ? 'colB' : 'colA' )];
+    return size;
+  };
+  $.Isotope.prototype._spineAlignResizeChanged = function() {
+    return true;
+  };
 
 })(jQuery, window);
