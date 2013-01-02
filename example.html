@@ -14,7 +14,12 @@
 <body>
 
   <!-- Include container for timeline -->
-  <div class="timeline-jquery-example">
+  <h1>Vertical Timeline Example 1</h1>
+  <div class="timeline-jquery-example-1">
+  </div>
+  
+  <h1>Vertical Timeline Example 2</h1>
+  <div class="timeline-jquery-example-2">
   </div>
 
   <!-- Include scripts -->
@@ -28,8 +33,16 @@
   
   <script type="text/javascript">
     $(document).ready(function() {
-      $('.timeline-jquery-example').verticalTimeline({
-        
+      $('.timeline-jquery-example-1').verticalTimeline({
+        key: '0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc',
+        sheetName: 'Posts'
+      });
+      
+      $('.timeline-jquery-example-2').verticalTimeline({
+        key: 'https://docs.google.com/spreadsheet/pub?key=0AtX8MXQ89fOKdDZadGcyNE9CZmFZV29tQjI5RFU3X3c&output=html',
+        sheetName: 'timeline-data',
+        defaultDirection: 'oldest',
+        groupFunction: 'groupSegmentByDecade'
       });
     });
   </script>
