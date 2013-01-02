@@ -15,6 +15,7 @@
       key: 'https://docs.google.com/spreadsheet/pub?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc&output=html',
       sheetName: 'Posts',
       defaultDirection: 'newest',
+      defaultExpansion: 'expanded',
       groupFunction: 'groupSegmentByYear',
       sharing: false,
       columnMapping: {
@@ -180,12 +181,6 @@
           $thisObj.find('.vertical-timeline-timeline').append(groupMarkerTemplate(group));
         });
         
-        // Handle default sort direction
-        if (timelineConfig.defaultDirection != 'newest') {
-          $thisObj.find('.sort-buttons a').removeClass('active');
-          $thisObj.find('.sort-buttons a.sort-oldest').addClass('active');
-        }
-        
         verticalTimeline.handleSharing();
         verticalTimeline.handleExpanding();
         verticalTimeline.handleSorting();
@@ -242,7 +237,20 @@
         $thisObj.find('.vertical-timeline-timeline .item.post').each(function() {
           $(this).find('.inner').append('<a href="#" class="open-close"></a>');
         });
-    
+        
+        // Handle default state
+        if (timelineConfig.defaultExpansion != 'expanded') {
+          $thisObj.find('.vertical-timeline-timeline .item').each(function() {
+            var $this = $(this);
+            $this.find('.body').hide();
+            $this.find('.post').toggleClass('closed');
+          });
+          
+          $thisObj.find('.expand-collapse-buttons a').removeClass('active');
+          $thisObj.find('.expand-collapse-buttons a.collapse-all').addClass('active');
+        };
+
+        // Handle click of individual buttons.
         $thisObj.find('.vertical-timeline-timeline .item a.open-close').click(function(e) {
           $(this).siblings('.body').slideToggle(function() {
             $thisObj.find('.vertical-timeline-timeline').isotope('reLayout');
@@ -277,6 +285,13 @@
        * Handle sorting.
        */
       verticalTimeline.handleSorting = function() {
+        // Handle default sort direction
+        if (timelineConfig.defaultDirection != 'newest') {
+          $thisObj.find('.sort-buttons a').removeClass('active');
+          $thisObj.find('.sort-buttons a.sort-oldest').addClass('active');
+        }
+        
+        // Handle buttons
         $thisObj.find('.sort-buttons a').click(function(e) {
           var $this = $(this);
           // don't proceed if already selected

@@ -68,6 +68,10 @@ The following options can be passed to the plugin when called:
   * Data type: string
   * Allowed values: ```newest```, ```oldest```
   * Default value: ```newest```
+* ```defaultExpansion```: This is default state of the posts.
+  * Data type: string
+  * Allowed values: ```expanded```, ```collapsed```
+  * Default value: ```expanded```
 * ```groupFunction```: The function that will handle the grouping of the timeline.  There are two functions that can be called with a string, otherwise provide your own custom function.
   * Data type: string or function
   * Allowed values: function, ```groupSegmentByYear```, ```groupSegmentByDecade```
