@@ -176,23 +176,23 @@
           // Add any other data
           val.sharing = timelineConfig.sharing;
           // Add output to timeline
-          $('.vertical-timeline-timeline').append(postTemplate(val));
+          $thisObj.find('.vertical-timeline-timeline').append(postTemplate(val));
         });
   
         // Add a group marker for each group
         $.each(groups, function(i, group) {
-          $('.vertical-timeline-timeline').append(groupMarkerTemplate(group));
+          $thisObj.find('.vertical-timeline-timeline').append(groupMarkerTemplate(group));
         });
         
         // Handle default sort direction
         if (timelineConfig.defaultDirection != 'newest') {
-          $('.sort-buttons a').removeClass('active');
-          $('.sort-buttons a.sort-oldest').addClass('active');
+          $thisObj.find('.sort-buttons a').removeClass('active');
+          $thisObj.find('.sort-buttons a.sort-oldest').addClass('active');
         }
     
         // Start rendering isotope goodness when images are loaded.
-        $('.vertical-timeline-timeline').imagesLoaded(function() {
-          $('.vertical-timeline-timeline').isotope({
+        $thisObj.find('.vertical-timeline-timeline').imagesLoaded(function() {
+          $thisObj.find('.vertical-timeline-timeline').isotope({
             itemSelector : '.item',
             transformsEnabled: true,
             layoutMode: 'spineAlign',
@@ -217,20 +217,20 @@
         }
     
         // add open/close buttons to each post
-        $('.vertical-timeline-timeline .item.post').each(function() {
+        $thisObj.find('.vertical-timeline-timeline .item.post').each(function() {
           $(this).find('.inner').append('<a href="#" class="open-close"></a>');
         });
     
-        $('.vertical-timeline-timeline .item a.open-close').click(function(e) {
+        $thisObj.find('.vertical-timeline-timeline .item a.open-close').click(function(e) {
           $(this).siblings('.body').slideToggle(function() {
-            $('.vertical-timeline-timeline').isotope('reLayout');
+            $thisObj.find('.vertical-timeline-timeline').isotope('reLayout');
           });
           $(this).parents('.post').toggleClass('closed');
-          $('.expand-collapse-buttons a').removeClass('active');
+          $thisObj.find('.expand-collapse-buttons a').removeClass('active');
           e.preventDefault();
         });
     
-        $('.vertical-timeline-timeline .post .share').hover(
+        $thisObj.find('.vertical-timeline-timeline .post .share').hover(
           function() {
             $(this).find('.share-trigger').addClass('over');
             $(this).find('.share-popup').show();
@@ -241,22 +241,22 @@
           }
         );
     
-        $('.vertical-timeline-buttons a.expand-all').click(function(e) {
-          $('.post .body').slideDown(function() {
-            $('.vertical-timeline-timeline').isotope('reLayout');
+        $thisObj.find('.vertical-timeline-buttons a.expand-all').click(function(e) {
+          $thisObj.find('.post .body').slideDown(function() {
+            $thisObj.find('.vertical-timeline-timeline').isotope('reLayout');
           });
-          $('.post').removeClass('closed');
-          $('.expand-collapse-buttons a').removeClass('active');
+          $thisObj.find('.post').removeClass('closed');
+          $thisObj.find('.expand-collapse-buttons a').removeClass('active');
           $(this).addClass('active');
           e.preventDefault();
         });
     
-        $('.vertical-timeline-buttons a.collapse-all').click(function(e) {
-          $('.post .body').slideUp(function() {
-            $('.vertical-timeline-timeline').isotope('reLayout');
+        $thisObj.find('.vertical-timeline-buttons a.collapse-all').click(function(e) {
+          $thisObj.find('.post .body').slideUp(function() {
+            $thisObj.find('.vertical-timeline-timeline').isotope('reLayout');
           });
-          $('.post').addClass('closed');
-          $('.expand-collapse-buttons a').removeClass('active');
+          $thisObj.find('.post').addClass('closed');
+          $thisObj.find('.expand-collapse-buttons a').removeClass('active');
           $(this).addClass('active');
           e.preventDefault();
         });
@@ -267,7 +267,7 @@
        * Update group markers as they are an interval.
        */
       function updateGroupMarkers(direction) {
-        $('.group-marker').each(function() {
+        $thisObj.find('.group-marker').each(function() {
           var $this = $(this);
           var id = $this.attr('data-id');
           var timestamp = (direction) ? 
@@ -281,7 +281,7 @@
        * Keep the actual line from extending beyond the last item's date tab
        */
       function adjustLine() {
-        var $lastItem = $('.item.last');
+        var $lastItem = $thisObj.find('.item.last');
         var itemPosition = $lastItem.data('isotope-item-position');
         var dateHeight = $lastItem.find('.date').height();
         var dateOffset = $lastItem.find('.date').position();
@@ -291,31 +291,31 @@
         var y = (itemPosition != null && itemPosition.y != null) ? 
           parseInt(itemPosition.y) : 0;
         var lineHeight = y + innerMargin + top + (dateHeight / 2);
-        $('.line').height(lineHeight);
+        $thisObj.find('.line').height(lineHeight);
       }
     
-      $('.sort-buttons a').click(function(e) {
+      $thisObj.find('.sort-buttons a').click(function(e) {
         var $this = $(this);
         // don't proceed if already selected
         if ($this.hasClass('active')) {
           return false;
         }
     
-        $('.sort-buttons a').removeClass('active');
+        $thisObj.find('.sort-buttons a').removeClass('active');
         $this.addClass('active');
         if ($this.hasClass('sort-newest')) {
           updateGroupMarkers(false);
-          $('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: false});
+          $thisObj.find('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: false});
         }
         else{
           updateGroupMarkers(true);
-          $('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: true});
+          $thisObj.find('.vertical-timeline-timeline').isotope('reloadItems').isotope({sortAscending: true});
         }
         e.preventDefault();
       });
     
     
-      $('.vertical-timeline-timeline').resize(function() { // uses "jQuery resize event" plugin
+      $thisObj.find('.vertical-timeline-timeline').resize(function() { // uses "jQuery resize event" plugin
         adjustLine();
       });
     
