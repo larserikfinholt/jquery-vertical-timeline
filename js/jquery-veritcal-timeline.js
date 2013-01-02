@@ -17,6 +17,16 @@
       defaultDirection: 'newest',
       groupFunction: 'groupSegmentByYear',
       sharing: false,
+      columnMapping: {
+        'title': 'title',
+        'date': 'date',
+        'display date': 'display_date',
+        'photo url': 'photo_url',
+        'caption': 'caption',
+        'body': 'body',
+        'read more url': 'read_more_url',
+        'title': 'title'
+      },
       postTemplate: ' \
         <div class="item post"> \
           <div class="inner"> \
@@ -155,10 +165,16 @@
         callback: setupTimeline,
         wanted: [timelineConfig.sheetName],
         postProcess: function(el) {
+          // Map the columns.  Tabletop removes spaces.
+          $.each(timelineConfig.columnMapping, function(key, val) {
+            key = key.replace(' ', '');
+            if (el[key]) {
+              el[val] = el[key];
+            }
+          });
+          
+          // Parse out the date
           el['timestamp'] = Date.parse(el['date']);
-          el['display_date'] = el['displaydate'];
-          el['read_more_url'] = el['readmoreurl'];
-          el['photo_url'] = el['photourl'];
         }
       });
       
