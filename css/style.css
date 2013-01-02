@@ -4,8 +4,7 @@
 
 .vertical-timeline-container .vertical-timeline-timeline {
   width: 600px;
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin: 20px auto 30px auto;
 }
 
 .vertical-timeline-container .vertical-timeline-timeline .clearfix:before, 
