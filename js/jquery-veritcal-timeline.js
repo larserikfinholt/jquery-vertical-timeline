@@ -12,10 +12,9 @@
      * to handle grouping.
      */
     var defaults = {
-      selector: '.timeline-jquery-container',
       key: 'https://docs.google.com/spreadsheet/pub?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc&output=html',
       sheetName: 'Posts',
-      defaultDirection: 'oldest',
+      defaultDirection: 'newest',
       groupFunction: 'groupSegmentByYear',
       sharing: false,
       postTemplate: ' \
@@ -142,6 +141,9 @@
       // Variables used across application (not the best way to
       // do this.
       var groups = {};
+      
+      // Add class to mark as processed
+      $thisObj.addClass('vertical-timeline-container');
       
       // Add in extra markup
       $thisObj.html(timelineConfig.buttonTemplate + 
