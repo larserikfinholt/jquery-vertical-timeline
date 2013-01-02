@@ -10,7 +10,7 @@ A running example can be found [here](http://minnpost.github.com/jquery-vertical
 
 ### Data
 
-Create a Google Spreadsheet with the following columns (see options for different names) and publish it.
+Create a Google Spreadsheet with the following columns (see options for different names) and publish it.  An example can be found [here](https://docs.google.com/spreadsheet/ccc?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc#gid=0);
 
 * title
 * date
@@ -49,14 +49,61 @@ First, include a container for the timeline:
     
 Call timeline with options.  Note that the ```key``` is the ID of the Google Spreadsheet, and the ```sheetname``` is the name of the sheet.
 
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $('.timeline-jquery-example-1').verticalTimeline({
-        key: '0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc',
-        sheetName: 'Posts'
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.timeline-jquery-example-1').verticalTimeline({
+          key: '0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc',
+          sheetName: 'Posts'
+        });
       });
-    });
-  </script>
+    </script>
+    
+## Options
+
+The following options can be passed to the plugin when called:
+
+* ```key```: This is the ID of the Google Spreadsheet.
+  * Data type: string
+  * Default value: ```0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc```
+* ```sheetName```: This is name of the sheet in the Google Spreadsheet.
+  * Data type: string
+  * Default value: ```Posts```
+* ```defaultDirection```: This is default order of the timeline.
+  * Data type: string
+  * Allowed values: ```newest```, ```oldest```
+  * Default value: ```newest```
+* ```groupFunction```: The function that will handle the grouping of the timeline.  There are two functions that can be called with a string, otherwise provide your own custom function.
+  * Data type: string or function
+  * Allowed values: function, ```groupSegmentByYear```, ```groupSegmentByDecade```
+  * Default value: ```groupSegmentByYear```
+* ```sharing```: This turns off and on sharing, but currently should not be used.
+  * Data type: boolean
+  * Allowed values: ```false```, ```true```
+  * Default value: ```false```
+* ```columnMapping```: This maps specific columns.  This should be an a simple object, where the key is the name of the column in the spreadsheet, and the value is the column expected by the timeline.
+  * Data type: object
+  * Default value: ```{
+        'title': 'title',
+        'date': 'date',
+        'display date': 'display_date',
+        'photo url': 'photo_url',
+        'caption': 'caption',
+        'body': 'body',
+        'read more url': 'read_more_url',
+        'title': 'title'
+      }```
+* ```postTemplate```: HTML template for each post.
+  * Data type: string
+  * Default value: (see code)
+* ```groupMarkerTemplate```: HTML template for each group marker.
+  * Data type: string
+  * Default value: (see code)
+* ```buttonTemplate```: HTML template for the top buttons.
+  * Data type: string
+  * Default value: (see code)
+* ```timelineTemplate```: HTML template for the timeline and middle line.
+  * Data type: string
+  * Default value: (see code)
 
 ## Bugs 
 
