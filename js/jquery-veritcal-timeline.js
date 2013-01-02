@@ -168,9 +168,6 @@
         var postTemplate  = Handlebars.compile(timelineConfig.postTemplate);
         var groupMarkerTemplate  = Handlebars.compile(timelineConfig.groupMarkerTemplate);
         
-        // Remove load message
-        $('.loading-general').slideUp('fast');
-        
         // Go through data from the sheet.
         $.each(tabletop.sheets(timelineConfig.sheetName).all(), function(i, val) {
           // Create groups (by year or whatever)
