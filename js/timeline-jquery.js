@@ -8,17 +8,17 @@
    * Sharing is using old APIs and breaks in some browsers.
    */
   var timelineConfig = {
-    key: 'https://docs.google.com/spreadsheet/pub?key=0AtX8MXQ89fOKdDZadGcyNE9CZmFZV29tQjI5RFU3X3c&output=html',
-    sheetName: 'timeline-data',
+    key: 'https://docs.google.com/spreadsheet/pub?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc&output=html',
+    sheetName: 'Posts',
     defaultDirection: 'oldest',
-    groupFunction: groupSegmentByDecade,
+    groupFunction: groupSegmentByYear,
     sharing: false,
     postTemplate: $('#post-template').html(),
     groupMarkerTemplate: $('#group-marker-template').html()
   };
   
   /**
-   * Grouping function.  Change this for different grouping.
+   * Grouping function by Decade.
    */
   function groupSegmentByDecade(segment, groups, direction) {
     // Grouping by decade
@@ -34,6 +34,26 @@
         Date.parse('January 1, ' + id + '0'),
       timestampStart: Date.parse('January 1, ' + id + '0'),
       timestampEnd: Date.parse('December 31, ' + id + '9')
+    };
+    
+    return groups;
+  };
+  
+  /**
+   * Grouping function by year.
+   */
+  function groupSegmentByYear(segment, groups, direction) {
+    // Grouping by decade
+    var year = new Date(segment.timestamp).getFullYear();
+    
+    groups[year] = {
+      id: year,
+      groupDisplay: year,
+      timestamp: (direction == 'newest') ? 
+        Date.parse('December 31, ' + year) :
+        Date.parse('January 1, ' + year),
+      timestampStart: Date.parse('January 1, ' + year),
+      timestampEnd: Date.parse('December 31, ' + year)
     };
     
     return groups;
