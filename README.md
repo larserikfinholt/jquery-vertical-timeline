@@ -1,10 +1,6 @@
 # jQuery Vertical Timeline
 
-Forked from the [Super Awesome Vertical Timeline](https://github.com/balancemedia/Timeline).
-
-jQuery Vertical Timeline utilizes a handful of super cool libraries, including [Tabletop.js](http://github.com/jsoma/tabletop) (for the data storage) and [Isotope](http://isotope.metafizzy.co/) for the layout.
-
-A running example can be found [here](http://minnpost.github.com/jquery-vertical-timeline/example.html).
+Forked from the [Super Awesome Vertical Timeline](https://github.com/balancemedia/Timeline).  A running example can be found [here](http://minnpost.github.com/jquery-vertical-timeline/example.html).  Please see the Credits below for some restrictions on use.
 
 ## How to Use
 
