@@ -8,13 +8,33 @@
    * Sharing is using old APIs and breaks in some browsers.
    */
   var timelineConfig = {
+    selector: '.timeline-jquery-container',
     key: 'https://docs.google.com/spreadsheet/pub?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc&output=html',
     sheetName: 'Posts',
     defaultDirection: 'oldest',
     groupFunction: groupSegmentByYear,
     sharing: false,
     postTemplate: $('#post-template').html(),
-    groupMarkerTemplate: $('#group-marker-template').html()
+    groupMarkerTemplate: $('#group-marker-template').html(),
+    buttonTemplate: ' \
+      <div id="buttons"> \
+        <div id="expand-collapse-buttons"> \
+          <a class="expand-all active" href="#"><span>EXPAND ALL</span></a> \
+          <a class="collapse-all" href="#"><span>COLLAPSE ALL</span></a> \
+        </div> \
+        <div id="sort-buttons"> \
+          <a class="sort-newest active" href="#"><span>NEWEST FIRST</span></a> \
+          <a class="sort-oldest" href="#"><span>OLDEST FIRST</span></a> \
+        </div> \
+      </div> \
+    ',
+    timelineTemplate: ' \
+      <div id="timeline"> \
+        <div id="line-container"> \
+          <div id="line"></div> \
+        </div> \
+      </div> \
+    '
   };
   
   /**
@@ -64,6 +84,10 @@
     // Variables used across application (not the best way to
     // do this.
     var groups = {};
+    
+    // Add in extra markup
+    $(timelineConfig.selector).html(timelineConfig.buttonTemplate + 
+      timelineConfig.timelineTemplate)
   
     // Get data via Tabletop
     Tabletop.init({
