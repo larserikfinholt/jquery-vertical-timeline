@@ -91,7 +91,7 @@ The following options can be passed to the plugin when called:
 * ```width```: The CSS-valid width of the timeline.  The default is ```auto``` and will use the container.
   * Data type: string
   * Default value: ```auto```
-* ```handleResize```: Enables handling the resize of the timeline to adjust widths.
+* ```handleResize```: Enables handling the resize of the timeline to adjust widths.  This is a bit buggy.
   * Data type: boolean
   * Allowed values: ```false```, ```true```
   * Default value: ```false```
