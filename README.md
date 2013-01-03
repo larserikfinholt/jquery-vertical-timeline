@@ -85,6 +85,9 @@ The following options can be passed to the plugin when called:
   * Data type: boolean
   * Allowed values: ```false```, ```true```
   * Default value: ```false```
+* ```gutterWidth```: The distance in pixels between the center line and each post body.
+  * Data type: integer
+  * Default value: ```56```
 * ```columnMapping```: This maps specific columns.  This should be an a simple object, where the key is the value is the column expected by the timeline, and the name of the column in the spreadsheet.
   * Data type: object
   * Default value: ```{

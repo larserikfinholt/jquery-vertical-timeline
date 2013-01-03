@@ -18,6 +18,7 @@
       defaultExpansion: 'expanded',
       groupFunction: 'groupSegmentByYear',
       sharing: false,
+      gutterWidth: 56,
       columnMapping: {
         'title': 'title',
         'date': 'date',
@@ -193,7 +194,7 @@
             transformsEnabled: true,
             layoutMode: 'spineAlign',
             spineAlign:{
-              gutterWidth: 56
+              gutterWidth: timelineConfig.gutterWidth
             },
             getSortData: {
               timestamp: function($elem) {
