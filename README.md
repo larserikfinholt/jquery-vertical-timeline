@@ -26,7 +26,7 @@ Include the CSS:
 
     <link rel="stylesheet" href="css/style.css">
 
-Include the Javascript.  Would be beneficial to combine these into a single file.
+Include the Javascript.  The following is the un-minified and un-combined version.
 
     <script type="text/javascript" src="js/libs/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="js/libs/handlebars-1.0.rc.1.min.js"></script>
@@ -35,6 +35,11 @@ Include the Javascript.  Would be beneficial to combine these into a single file
     <script type="text/javascript" src="js/libs/jquery.ba-resize.v1.1.min.js"></script>
     <script type="text/javascript" src="js/libs/jquery.imagesloaded.v2.1.0.min.js"></script>
     <script type="text/javascript" src="js/jquery-veritcal-timeline.js"></script>
+    
+OR, use the built version (note, this will only be updated with a specific version):
+
+    <script type="text/javascript" src="js/libs.combined.min.js"></script>
+    <script type="text/javascript" src="js/jquery-veritcal-timeline.min.js"></script>
 
 ### Run
 
@@ -104,6 +109,12 @@ The following options can be passed to the plugin when called:
 * ```timelineTemplate```: HTML template for the timeline and middle line.
   * Data type: string
   * Default value: (see code)
+  
+## Building
+
+Building is only done for specific versions; it simply combines all the libraries and minifies the timeline plugin.  To run the build process, make sure you have [UglifyJS](https://github.com/mishoo/UglifyJS) and run the following:
+
+    bash build.sh
 
 ## Bugs 
 
