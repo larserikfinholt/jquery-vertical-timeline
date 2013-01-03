@@ -33,7 +33,6 @@
 
 .vertical-timeline-container .vertical-timeline-timeline .post .inner {
   position: relative;
-  width: 247px;
   padding: 11px;
   border: 1px #adadad solid;
   background-color: #fff;
@@ -77,7 +76,7 @@
 }
 
 .vertical-timeline-container .vertical-timeline-timeline .post .body img {
-  max-width: 247px;
+  max-width: 100%;
 }
 
 .vertical-timeline-container .vertical-timeline-timeline .post .text {
@@ -117,7 +116,7 @@
   font-size: 12px;
   font-weight: bold;
   text-align: center;
-  width: 211px;
+  width: 80%;
   height: 28px;
   border: 1px #87b2d3 solid;
   background-color: #d6e5f0;
@@ -141,7 +140,7 @@
   font-size: 12px;
   font-weight: bold;
   text-align: center;
-  width: 28px;
+  width: 20%;
   height: 28px;
   border: 1px #87b2d3 solid;
   background: #d6e5f0 url(img/icon-share.png) no-repeat center center;

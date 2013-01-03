@@ -18,6 +18,9 @@
       defaultExpansion: 'expanded',
       groupFunction: 'groupSegmentByYear',
       sharing: false,
+      gutterWidth: 56,
+      width: 'auto',
+      handleResize: false,
       columnMapping: {
         'title': 'title',
         'date': 'date',
@@ -184,6 +187,7 @@
         verticalTimeline.handleSharing();
         verticalTimeline.handleExpanding();
         verticalTimeline.handleSorting();
+        verticalTimeline.adjustWidth();
         verticalTimeline.handleResizing();
     
         // Start rendering isotope goodness when images are loaded.
@@ -193,7 +197,7 @@
             transformsEnabled: true,
             layoutMode: 'spineAlign',
             spineAlign:{
-              gutterWidth: 56
+              gutterWidth: timelineConfig.gutterWidth
             },
             getSortData: {
               timestamp: function($elem) {
@@ -202,7 +206,10 @@
             },
             sortBy: 'timestamp',
             sortAscending: (timelineConfig.defaultDirection == 'newest') ? false : true,
-            itemPositionDataEnabled: true
+            itemPositionDataEnabled: true,
+            onLayout: function($elems, instance) {
+              verticalTimeline.adjustLine();
+            }
           });
         });
       };
@@ -319,9 +326,12 @@
        * Handle resize.  Uses "jQuery resize event" plugin
        */
       verticalTimeline.handleResizing = function() {
-        $thisObj.find('.vertical-timeline-timeline').resize(function() { // 
-          verticalTimeline.adjustLine();
-        });
+        if (timelineConfig.handleResize === true) {
+          $thisObj.resize(function() {
+            verticalTimeline.adjustWidth();
+            verticalTimeline.adjustLine();
+          });
+        }
       };
       
       /**
@@ -339,7 +349,30 @@
       };
       
       /**
-       * Keep the actual line from extending beyond the last item's date tab
+       * Adjust width.
+       */
+      verticalTimeline.adjustWidth = function() {
+        var w = timelineConfig.width;
+        var containerW = $thisObj.width();
+        var timelineW;
+        var postW;
+
+        if (timelineConfig.width === 'auto') {
+          w = containerW + 'px';
+        }
+        
+        // Set timeline width
+        $thisObj.find('.vertical-timeline-timeline').width(w);
+        timelineW = $thisObj.find('.vertical-timeline-timeline').width();
+        
+        // Set width on posts
+        postW = (timelineW / 2) - (timelineConfig.gutterWidth / 2) - 4;
+        $thisObj.find('.vertical-timeline-timeline .post').width(postW);
+      };
+      
+      /**
+       * Keep the actual line from extending beyond the last item's date tab,
+       * and keep centered.
        */
       verticalTimeline.adjustLine = function() {
         var $lastItem = $thisObj.find('.item.last');
@@ -347,12 +380,16 @@
         var dateHeight = $lastItem.find('.date').height();
         var dateOffset = $lastItem.find('.date').position();
         var innerMargin = parseInt($lastItem.find('.inner').css('marginTop'));
-        
         var top = (dateOffset == null) ? 0 : parseInt(dateOffset.top);
         var y = (itemPosition != null && itemPosition.y != null) ? 
           parseInt(itemPosition.y) : 0;
         var lineHeight = y + innerMargin + top + (dateHeight / 2);
-        $thisObj.find('.line').height(lineHeight);
+        var $line = $thisObj.find('.line');
+        var $timeline = $thisObj.find('.vertical-timeline-timeline');
+        var xOffset = ($timeline.width() / 2) - ($line.width() / 2);
+        
+        $line.height(lineHeight)
+          .css('left', xOffset + 'px');
       };
     
       /**
