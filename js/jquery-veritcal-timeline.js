@@ -21,11 +21,11 @@
       columnMapping: {
         'title': 'title',
         'date': 'date',
-        'display date': 'display_date',
-        'photo url': 'photo_url',
+        'display_date': 'display date',
+        'photo_url': 'photo url',
         'caption': 'caption',
         'body': 'body',
-        'read more url': 'read_more_url',
+        'read_more_url': 'read more url',
         'title': 'title'
       },
       postTemplate: ' \
@@ -364,10 +364,10 @@
         wanted: [timelineConfig.sheetName],
         postProcess: function(el) {
           // Map the columns.  Tabletop removes spaces.
-          $.each(timelineConfig.columnMapping, function(key, val) {
-            key = key.split(' ').join('');
-            if (el[key]) {
-              el[val] = el[key];
+          $.each(timelineConfig.columnMapping, function(key, column) {
+            column = column.split(' ').join('');
+            if (el[column]) {
+              el[key] = el[column];
             }
           });
           
