@@ -88,6 +88,13 @@ The following options can be passed to the plugin when called:
 * ```gutterWidth```: The distance in pixels between post bodies.
   * Data type: integer
   * Default value: ```56```
+* ```width```: The CSS-valid width of the timeline.  The default is ```auto``` and will use the container.
+  * Data type: string
+  * Default value: ```auto```
+* ```handleResize```: Enables handling the resize of the timeline to adjust widths.
+  * Data type: boolean
+  * Allowed values: ```false```, ```true```
+  * Default value: ```false```
 * ```columnMapping```: This maps specific columns.  This should be an a simple object, where the key is the value is the column expected by the timeline, and the name of the column in the spreadsheet.
   * Data type: object
   * Default value: ```{
