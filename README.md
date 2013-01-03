@@ -85,16 +85,16 @@ The following options can be passed to the plugin when called:
   * Data type: boolean
   * Allowed values: ```false```, ```true```
   * Default value: ```false```
-* ```columnMapping```: This maps specific columns.  This should be an a simple object, where the key is the name of the column in the spreadsheet, and the value is the column expected by the timeline.
+* ```columnMapping```: This maps specific columns.  This should be an a simple object, where the key is the value is the column expected by the timeline, and the name of the column in the spreadsheet.
   * Data type: object
   * Default value: ```{
         'title': 'title',
         'date': 'date',
-        'display date': 'display_date',
-        'photo url': 'photo_url',
+        'display_date': 'display date',
+        'photo_url': 'photo url',
         'caption': 'caption',
         'body': 'body',
-        'read more url': 'read_more_url',
+        'read_more_url': 'read more url',
         'title': 'title'
       }```
 * ```postTemplate```: HTML template for each post.
