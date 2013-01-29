@@ -1,6 +1,5 @@
 # jQuery Vertical Timeline
-
-Forked from the [Super Awesome Vertical Timeline](https://github.com/balancemedia/Timeline).  A running example can be found [here](http://minnpost.github.com/jquery-vertical-timeline/example.html).  Please see the Credits below for some restrictions on use.
+Forked from jQuery addition https://github.com/MinnPost/jquery-vertical-timeline which is again forked from the [Super Awesome Vertical Timeline](https://github.com/balancemedia/Timeline).  A running example can be found [here](http://minnpost.github.com/jquery-vertical-timeline/example.html).  Please see the Credits below for some restrictions on use.
 
 ## How to Use
 
