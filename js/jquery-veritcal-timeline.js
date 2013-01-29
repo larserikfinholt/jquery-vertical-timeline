@@ -14,9 +14,10 @@
     var defaults = {
       key: 'https://docs.google.com/spreadsheet/pub?key=0AsmHVq28GtVJdG1fX3dsQlZrY18zTVA2ZG8wTXdtNHc&output=html',
       sheetName: 'Posts',
+      jsonSrc: '',
       defaultDirection: 'newest',
       defaultExpansion: 'expanded',
-      groupFunction: 'groupSegmentByYear',
+      groupFunction: 'groupSegmentByMonth',
       sharing: false,
       gutterWidth: 56,
       width: 'auto',
@@ -137,6 +138,31 @@
       
       return groups;
     };
+
+      /**
+ * Grouping function by month.
+ */
+    var groupSegmentByMonth = function (segment, groups, direction) {
+        // Grouping by decade
+        var month = new Date(segment.timestamp).getMonth();
+        var t = new Date(segment.timestamp);
+        var year = new Date(segment.timestamp).getFullYear();
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+        var id = month + "." + year;
+
+        groups[id] = {
+            id: id,
+            groupDisplay: monthNames[month] + " " + year,
+            timestamp: (direction == 'newest') ? (new Date(t.getFullYear(), t.getMonth() , 1)).getTime() : (new Date(t.getFullYear(), t.getMonth() +1 , 0, 23, 59, 59)).getTime() ,
+            timestampStart: (new Date(t.getFullYear(), t.getMonth(), 1)).getTime(),
+            timestampEnd: (new Date(t.getFullYear(), t.getMonth() +1, 0, 23, 59, 59)).getTime()
+        };
+
+        return groups;
+    };
+
+
   
     // Mix defaults with options.
     var timelineConfig = $.extend(defaults, options);
@@ -147,7 +173,9 @@
       groupSegmentByYear : timelineConfig.groupFunction;
     timelineConfig.groupFunction = (timelineConfig.groupFunction === 'groupSegmentByDecade') ?
       groupSegmentByDecade : timelineConfig.groupFunction;
-   
+    timelineConfig.groupFunction = (timelineConfig.groupFunction === 'groupSegmentByMonth') ?
+        groupSegmentByMonth : timelineConfig.groupFunction;
+
     // Go through each jquery object
     return this.each(function() {  
       var $thisObj = $(this);
@@ -164,20 +192,36 @@
       /**
        * Handle data loaded in from Tabletop, then render.
        */
-      verticalTimeline.setupTimeline = function(data, tabletop) {
+      verticalTimeline.setupTimeline = function(data, tabletop, useJSON) {
         var postTemplate  = Handlebars.compile(timelineConfig.postTemplate);
         var groupMarkerTemplate  = Handlebars.compile(timelineConfig.groupMarkerTemplate);
         
-        // Go through data from the sheet.
-        $.each(tabletop.sheets(timelineConfig.sheetName).all(), function(i, val) {
-          // Create groups (by year or whatever)
-          groups = timelineConfig.groupFunction(val, groups, timelineConfig.defaultDirection);
+        if (useJSON=='undefined') {
+            // Go through data from the sheet.
+            $.each(tabletop.sheets(timelineConfig.sheetName).all(), function(i, val) {
+                // Create groups (by year or whatever)
+                groups = timelineConfig.groupFunction(val, groups, timelineConfig.defaultDirection);
     
-          // Add any other data
-          val.sharing = timelineConfig.sharing;
-          // Add output to timeline
-          $thisObj.find('.vertical-timeline-timeline').append(postTemplate(val));
-        });
+                // Add any other data
+                val.sharing = timelineConfig.sharing;
+                // Add output to timeline
+                $thisObj.find('.vertical-timeline-timeline').append(postTemplate(val));
+            });
+        } else {
+            // Go through data from JSON.
+            $.each(data.elements, function (i, val) {
+                // Parse out the date
+                val['timestamp'] = Date.parse(val['date']);
+
+                // Create groups (by year or whatever)
+                groups = timelineConfig.groupFunction(val, groups, timelineConfig.defaultDirection);
+    
+                // Add any other data
+                val.sharing = timelineConfig.sharing;
+                // Add output to timeline
+                $thisObj.find('.vertical-timeline-timeline').append(postTemplate(val));
+            });
+        }
   
         // Add a group marker for each group
         $.each(groups, function(i, group) {
@@ -395,23 +439,35 @@
       /**
        * Get data via Tabletop and then start rendering.
        */
-      Tabletop.init({
-        key: timelineConfig.key,
-        callback: verticalTimeline.setupTimeline,
-        wanted: [timelineConfig.sheetName],
-        postProcess: function(el) {
-          // Map the columns.  Tabletop removes spaces.
-          $.each(timelineConfig.columnMapping, function(key, column) {
-            column = column.split(' ').join('');
-            if (el[column]) {
-              el[key] = el[column];
-            }
-          });
+      if (timelineConfig.jsonSrc=='') {
+          Tabletop.init({
+              key: timelineConfig.key,
+              callback: verticalTimeline.setupTimeline,
+              wanted: [timelineConfig.sheetName],
+              postProcess: function(el) {
+                  // Map the columns.  Tabletop removes spaces.
+                  $.each(timelineConfig.columnMapping, function(key, column) {
+                      column = column.split(' ').join('');
+                      if (el[column]) {
+                          el[key] = el[column];
+                      }
+                  });
           
-          // Parse out the date
-          el['timestamp'] = Date.parse(el['date']);
-        }
-      });
+                  // Parse out the date
+                  el['timestamp'] = Date.parse(el['date']);
+              }
+          });
+      } else {
+
+          console.log("loading from " + timelineConfig.jsonSrc);
+          $.getJSON(timelineConfig.jsonSrc + "?rand=" + (new Date()).getMilliseconds(), {}, function (data, textStatus, jqXHR) {
+              console.log("...got data");
+              verticalTimeline.setupTimeline(data, {}, true);
+
+          });
+          }
+
+
     });  
   };  
 
